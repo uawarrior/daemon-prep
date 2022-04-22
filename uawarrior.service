@@ -1,13 +1,13 @@
 [Unit]
-Description=ROT13 demo service
+Description=automated uawarrior service
 After=network.target
 StartLimitIntervalSec=0
 [Service]
 Type=simple
 Restart=always
-RestartSec=1
-User=**YourUser**
-ExecStart=**pathToYourScript**
+RestartSec=10
+User=root
+ExecStart=/bin/bash /home/user/folder/automation-script.sh
 
 [Install]
 WantedBy=multi-user.target
