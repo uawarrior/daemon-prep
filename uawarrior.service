@@ -1,13 +1,15 @@
 [Unit]
-Description=automated uawarrior service
+Description=automated custom uawarrior service
 After=network.target
 StartLimitIntervalSec=0
 [Service]
+WorkingDirectory=/home/user/folder
 Type=simple
 Restart=always
 RestartSec=10
 User=root
 ExecStart=/bin/bash /home/user/folder/automation-script.sh
+ExecStopPost=/bin/bash /home/user/folder/uawarrior-stop.sh
 
 [Install]
 WantedBy=multi-user.target
