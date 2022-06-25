@@ -5,7 +5,16 @@
 #duration="15m" #This is now randomly chosen as well
 threads_count="-t 6000"
 #targets_source="-c https://raw.githubusercontent.com/uawarrior/project1/main/trgts0.txt"
-more_params="--itarmy --vpn --debug --http-methods GET STRESS" #removed: -p 1200
+more_params="--itarmy --vpn" #removed: -p 1200 --debug --http-methods GET STRESS
+trap bashtrap INT
+bashtrap()
+{
+	echo -e "[\033[1;32m$(date +"%d-%m-%Y %T")\033[1;0m] - Received interruption signal! Removing any existing containers and closing connections."
+	docker rm -f $(docker ps -a -q)
+	docker container prune -f && docker image prune -f
+	cyberghostvpn --stop
+	exit 1
+}
 
 echo -e "[\033[1;32m$(date +"%d-%m-%Y %T")\033[1;0m] - Start: Removing any existing docker containers"
 docker rm -f $(docker ps -a -q)
